@@ -13,7 +13,7 @@ pipeline {
 
         stage('Build Frontend') {
             steps {
-                sh 'cd frontend && npm install && ng build --prod'
+                sh 'npm install && ng build'
             }
         }
     }
