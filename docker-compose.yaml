@@ -1,0 +1,37 @@
+version: '2'
+
+services:
+  mysqldb:
+    image: mysql:5.7
+    networks:
+      - network
+    environment:
+      MYSQL_DATABASE: 'devops'
+      MYSQL_ROOT_PASSWORD: 'root'
+    ports:
+      - "3306:3306"
+
+  devops_backend:
+    depends_on:
+      - mysqldb
+    ports:
+      - "8082:8082"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysqldb:3306/devops?createDatabaseIfNotExist=true
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: devops
+    networks:
+      - network
+    image: ouesmed/devops_back_project:latest
+
+  devops_frontend:
+    image: ouesmed/devops_front_project:latest
+    ports:
+      - "8081:80"
+    depends_on:
+      - devops_backend
+    networks:
+      - network
+
+networks:
+  network:
